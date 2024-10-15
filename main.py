@@ -36,7 +36,7 @@ class ISigninRequest(BaseModel):
 
 @app.post("/api/signin")
 async def signin_handler(req: ISigninRequest):
-    if req.password == "friendship":
+    if req.password == "thriveteam2025":
         return {"logged_in": True}
     return {"logged_in": False}
 
