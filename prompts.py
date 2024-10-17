@@ -109,3 +109,98 @@ Important:
 •	For 'Yes, it's all factual,' confirm that no further changes are needed.
 •	For 'Knowledge cutoff reached,' clearly state that the information exceeds the system's knowledge and recommend further fact-checking.
 """
+
+TECH_VERIFY_PROMPT = """Can you review this article for potential technical inaccuracies, inconsistencies, safety risks, and factual accuracy? Additionally, verify that the claims are supported by credible sources, both from the writer and external references. Please follow these steps:
+________________________________________
+1. Determine Presence of Technical Details:
+•	First, assess whether the article contains technical details, such as specifications, ratings, measurements, safety instructions, or usage guidelines.
+o	If no technical content is present, respond with 'No technical details found' along with the statement, 'The article does not contain any technical information that requires verification.'
+________________________________________
+2. Identify Critical Technical Information (if applicable):
+•	If technical details are present, break the article into sections and identify key technical details, such as specifications, ratings, measurements, safety instructions, or usage guidelines. Consider the following technical aspects:
+o	Specifications and Ratings
+o	Measurements and Units
+o	Tolerances and Limits
+o	Safety Instructions and Warnings
+o	Usage Guidelines and Best Practices
+o	Component Descriptions and Functions
+o	Process and Step-by-Step Instructions
+o	Materials and Durability Information
+o	Energy and Power Consumption
+o	Operating Conditions and Environmental Factors
+o	Maintenance and Repair Information
+o	Troubleshooting and Diagnostics
+o	Compatibility and Interoperability
+________________________________________
+3. Cross-Check Technical Accuracy:
+•	For each identified technical detail, cross-check it against reliable and established standards, manufacturer guidelines, or trusted sources in the relevant field. Ensure that:
+o	Specifications, ratings, or measurements align with standard practices.
+o	Safety recommendations and usage guidelines are correct and not misleading.
+o	Any numerical values match industry norms or manufacturer specs.
+________________________________________
+4. Verify Sources and Cross-Check Information:
+•	Locate and Verify Provided Sources:
+o	Identify the sources provided by the writer (e.g., under a 'Sources' or 'Links' section). Check if these sources are credible and directly support the claims in the article.
+o	Ensure that each key technical detail is supported by an appropriate source from the writer's list. If any claims are unsupported or mismatched, flag them for correction.
+•	Cross-Check with Reliable Online Sources:
+o	If the writer’s sources are absent, incomplete, or not credible, verify the claims against reliable and trustworthy online sources, such as official documentation, industry-standard references, or academic publications.
+o	Ensure that the technical details are consistent with current best practices and factual information found in authoritative sources.
+•	Assess Source Alignment:
+o	If all technical claims are fully supported by the writer's sources or external credible sources, respond with 'Yes, sources check out.'
+o	If any claims are not supported, respond with 'No, sources do not check out' and list the specific unsupported claims.
+________________________________________
+5. Assess the Safety Risks:
+•	Evaluate potential safety risks associated with incorrect technical information. For each detail, consider:
+o	Could misleading or incorrect details lead to harm, equipment damage, or safety hazards (e.g., fire risk, mechanical failure)?
+o	Does the article explain why correct specifications (e.g., proper fuse ratings) are crucial for avoiding risks?
+________________________________________
+6. Check for Contradictions or Inconsistencies:
+•	Ensure there are no contradictions within the article. Verify that:
+o	Information is consistent throughout, with no conflicting technical advice.
+o	Instructions and explanations follow a logical, coherent sequence.
+________________________________________
+7. Evaluate Clarity for the Reader:
+•	Assess whether technical details are explained clearly for the intended audience. Consider:
+o	Are technical terms and concepts explained where necessary?
+o	Could any part of the article confuse the reader or lead to misinterpretation?
+________________________________________
+8. Flag Potential Errors or Ambiguities:
+•	Identify any areas where technical information could be misunderstood or misapplied. If errors or ambiguous sections are found, flag them for correction.
+________________________________________
+9. Compare Against Industry Standards:
+•	Compare key technical claims and safety recommendations against relevant industry standards. If the article deviates from these standards, suggest corrections to bring it in line with best practices.
+________________________________________
+Provide Suggestions for Fixing Issues:
+•	If inaccuracies, inconsistencies, unsupported claims, or safety risks are found, provide a detailed breakdown, offering suggestions on how to fix them. For example:
+o	Technical Accuracy Issue: '[Insert inaccurate technical detail]' is incorrect based on [insert source or standard]. Consider revising it to '[insert corrected detail].'
+o	Source Issue: '[Insert claim]' is not supported by any credible source. Either remove the claim or find a reputable source to back it up.
+o	Safety Risk: '[Insert detail]' poses a safety risk (e.g., fire hazard). Add a warning to ensure proper usage.
+o	Clarity Issue: '[Insert technical explanation]' could confuse readers. Provide more context or explanation to clarify.
+________________________________________
+Instruction:
+Please conduct a thorough analysis and output one of the following based on the technical accuracy and source verification of the article:
+1.	No technical details found:
+o	Reason: 'The article does not contain any technical information that requires verification.'
+2.	Technically Accurate and Supported by Sources:
+o	Reason: 'All technical details are accurate and supported by credible sources.'
+o	Explanation: No revisions needed; the article is technically sound and properly sourced.
+3.	Technical Issues Identified:
+o	Reason: 'Exactly [number] technical inaccuracies or inconsistencies found.'
+o	Detailed Breakdown of Fixes Needed:
+	Inaccuracy 1: '[Insert inaccurate technical detail]' is incorrect. Correct as '[insert corrected detail].'
+	Safety Risk 1: '[Insert safety issue]' poses a hazard. Correct this to '[insert corrected safety detail].'
+4.	Unsupported Claims or Mismatched Sources:
+o	Reason: 'Exactly [number] claims are not supported by the sources provided or external credible sources.'
+o	Detailed Breakdown of Fixes Needed:
+	Unsupported Claim 1: '[Insert claim]' is not backed by [insert source]. Either find a reliable source or remove the claim from the article.
+5.	Ambiguities or Misleading Information:
+o	Reason: 'Exactly [number] areas are ambiguous or could mislead the reader.'
+o	Detailed Breakdown of Fixes Needed:
+	Ambiguity 1: '[Insert ambiguous section]' needs clarification. Suggest rewording as '[insert correction].'
+6.	Critical Safety Risk Identified:
+o	Reason: 'A critical safety risk was found related to [insert issue].'
+o	Explanation: This must be corrected immediately to prevent hazards like overheating or mechanical failure. Correct as '[insert fix].'
+________________________________________
+Important:
+Always provide a detailed breakdown for 'Technical Issues Identified,' 'Unsupported Claims,' and 'Ambiguities or Misleading Information' responses, specifying the exact issues and how they can be resolved. For 'Critical Safety Risk,' flag the issue for immediate correction.
+"""

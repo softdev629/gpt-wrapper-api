@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
-from prompts import SOURCE_VERIFY_PROMPT, DETAIL_VERIFY_PROMPT, FACTUAL_VERIFY_PROMPT
+from prompts import SOURCE_VERIFY_PROMPT, DETAIL_VERIFY_PROMPT, FACTUAL_VERIFY_PROMPT, TECH_VERIFY_PROMPT
 
 load_dotenv()
 
@@ -92,6 +92,24 @@ async def verify_factual_handler(text: str = Body(embed=True)):
             {
                 "role": "system",
                 "content": FACTUAL_VERIFY_PROMPT,
+            },
+            {
+                "role": "user",
+                "content": f"Review the following content as specified in the system.\n\n<content>{text}</content>",
+            },
+        ],
+    )
+    return {"result": completion.choices[0].message.content}
+
+@app.post("/api/verify/tech")
+async def verify_tech_handler(text: str = Body(embed=True)):
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        temperature=0,
+        messages=[
+            {
+                "role": "system",
+                "content": TECH_VERIFY_PROMPT,
             },
             {
                 "role": "user",
